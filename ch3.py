@@ -4,7 +4,6 @@
 from sklearn import datasets
 import numpy as np
 
-
 # In[2]:
 
 
@@ -12,8 +11,6 @@ iris = datasets.load_iris()
 X = iris.data[:, [2,3]]
 y = iris.target
 print('Class labels:', np.unique(y))
-
-
 # In[3]:
 
 
@@ -63,7 +60,6 @@ print('Accuracy: %.2f' % accuracy_score(y_test, y_pred))
 
 # In[9]:
 
-
 from matplotlib.colors import ListedColormap
 import matplotlib.pyplot as plt
 
@@ -103,9 +99,7 @@ def plot_decision_regions(X, y, classifier, test_idx=None,
                     linewidth=1, marker='o',
                     s=100, label='test set')
 
-
 # In[10]:
-
 
 X_combined_std = np.vstack((X_train_std, X_test_std))
 y_combined = np.hstack((y_train, y_test))
@@ -117,14 +111,15 @@ plt.xlabel('petal length [standardized]')
 plt.ylabel('petal width [standardized]')
 plt.legend(loc='upper left')
 plt.show()
-
-
 # In[11]:
-
 
 from sklearn.linear_model import LogisticRegression
 lr = LogisticRegression(C=100.0, random_state=1, solver='liblinear', multi_class='ovr')
 lr.fit(X_train_std, y_train)
+y_pred2 = lr.predict(X_test_std)
+print('Misclassified samples: %d' % (y_test != y_pred2).sum())
+print('Accuracy: %.2f' % accuracy_score(y_test, y_pred2))
+#%%
 plot_decision_regions(X_combined_std,
                       y_combined, 
                       classifier=lr,
@@ -281,7 +276,7 @@ tree = DecisionTreeClassifier(criterion='gini',
 tree.fit(X_train, y_train)
 X_combined = np.vstack((X_train, X_test))
 y_combined = np.hstack((y_train, y_test))
-plot_decision_regions(X_combined, 
+plot_decision_regions(X_combined,   
                       y_combined, 
                       classifier=tree, 
                       test_idx=range(105, 150))
@@ -308,7 +303,3 @@ plt.show()
 
 
 # In[ ]:
-
-
-
-
