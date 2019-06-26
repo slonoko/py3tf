@@ -61,3 +61,8 @@ def calcNB(arr):
     p_arr_c3 = p_c3*p_k_c3
 
     return p_arr_c1, p_arr_c2, p_arr_c3 
+
+#%%
+print(calcNB(X[111]))
+
+#%%
