@@ -1,4 +1,4 @@
-class MyProcessor:     
+class MyProcessor:
 
-    def run(self, df):        
+    def run(self, df):
         return df.agg(['mean', 'min', 'max'])

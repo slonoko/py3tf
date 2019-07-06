@@ -5,7 +5,7 @@ from sklearn import datasets
 iris = datasets.load_iris()
 X = iris.data[:, :2]
 y = (iris.target != 0) * 1
-
+print(X, y)
 #%%
 class LogistikRegression:
     def __init__(self, lr=0.01, num_iter=100000, fit_intercept=True, verbose=False):
