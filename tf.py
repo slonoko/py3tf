@@ -4,8 +4,49 @@ import numpy as np
 import tensorflow as tf
 print(tf.__version__)
 
-# %%
+#%%
+g = tf.Graph()
+t = np.random.rand(20240, 1)
+r = np.random.rand(20240, 1)
 
+%time f = np.dot(t, r.T)
+
+with g.as_default():
+    x = tf.placeholder(dtype=tf.float32, shape=(20240,1), name='x')
+    y = tf.placeholder(dtype=tf.float32, shape=(20240,1), name='y')
+    z = tf.matmul(x, y, transpose_b=True, name = 'z')
+    init = tf.global_variables_initializer()
+
+with tf.Session(graph=g) as sess:
+    sess.run(init)
+    %time v = sess.run(z, feed_dict={x: t, y: r})
+
+#%%
+import numpy as np
+a = np.array([1, 2, 1])
+w = np.array([[.5, .6], [.7, .8], [.7, .8]])
+
+print(np.dot(a, w))
+# [ 2.6  3. ] # plain nice old matix multiplication n x (n, m) -> m
+print(np.sum(np.expand_dims(a, -1) * w , axis=0))
+# equivalent result [2.6, 3]
+
+import tensorflow as tf
+
+a = tf.constant(a, dtype=tf.float64)
+w = tf.constant(w)
+
+with tf.Session() as sess:
+  # they all produce the same result as numpy above
+  print(tf.matmul(tf.expand_dims(a,0), w).eval())
+  print((tf.reduce_sum(tf.multiply(tf.expand_dims(a,-1), w), axis=0)).eval())
+  print((tf.reduce_sum(tf.multiply(a, tf.transpose(w)), axis=1)).eval())
+
+  # Note tf.multiply is equivalent to "*"
+  print((tf.reduce_sum(tf.expand_dims(a,-1) * w, axis=0)).eval())
+  print((tf.reduce_sum(a * tf.transpose(w), axis=1)).eval())
+
+# %%
 # create a graph
 g = tf.Graph()
 with g.as_default():
