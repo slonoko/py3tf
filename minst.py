@@ -31,9 +31,9 @@ def load_mnist(path, kind='train'):
 
 
 # %%
-X_train, y_train = load_mnist('/tf/mnist/', kind='train')
+X_train, y_train = load_mnist('mnist/', kind='train')
 print('Rows: %d, columns: %d' % (X_train.shape[0], X_train.shape[1]))
-X_test, y_test = load_mnist('/tf/mnist/', kind='t10k')
+X_test, y_test = load_mnist('mnist/', kind='t10k')
 print('Rows: %d, columns: %d' % (X_test.shape[0], X_test.shape[1]))
 # %%
 
@@ -50,7 +50,7 @@ plt.tight_layout()
 plt.show()
 
 #%%
-np.savez_compressed('/tf/mnist/mnist_scaled.npz',
+np.savez_compressed('mnist/mnist_scaled.npz',
                     X_train=X_train,
                     y_train=y_train,
                     X_test=X_test,
@@ -163,7 +163,7 @@ model.compile(optimizer=sgd_optimizer,
 
 history = model.fit(X_train_centered, y_train_onehot,
                     batch_size=64, epochs=50,
-                    verbose=0,
+                    verbose=1,
                     validation_split=0.1)
 
 #%%
@@ -204,5 +204,10 @@ y_test_pred = model.predict_classes(X_test_centered,
 correct_preds = np.sum(y_test == y_test_pred, axis=0)
 test_acc = correct_preds / y_test.shape[0]
 print('Test accuracy: %.2f%%' % (test_acc * 100))
+
+#%%
+from tensorflow.python.client import device_lib
+
+device_lib.list_local_devices()
 
 #%%

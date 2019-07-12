@@ -7,8 +7,11 @@ warnings.simplefilter('ignore')
 !pip install --user scikit-learn
 !pip install --user matplotlib
 !pip install --user pandas
-!pip install --user tensorflow
+!pip install --user tensorflow-gpu
 !pip install --user sklearn
 !pip install --user pyprind
+
+#%%
+!pip install --user tensorflow-gpu
 
 #%%

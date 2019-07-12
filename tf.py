@@ -9,7 +9,7 @@ g = tf.Graph()
 t = np.random.rand(20240, 1)
 r = np.random.rand(20240, 1)
 
-%time f = np.dot(t, r.T)
+#%time f = np.dot(t, r.T)
 
 with g.as_default():
     x = tf.placeholder(dtype=tf.float32, shape=(20240,1), name='x')
