@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Number Identifier</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        window.onload = function () {
+            (function () {
+                // Creates a new canvas element and appends it as a child
+                // to the parent element, and returns the reference to
+                // the newly created canvas element
+
+
+                function createCanvas(parent, width, height) {
+                    var canvas = {};
+                    canvas.node = document.createElement('canvas');
+                    canvas.context = canvas.node.getContext('2d');
+                    canvas.node.width = width || 100;
+                    canvas.node.height = height || 100;
+                    parent.appendChild(canvas.node);
+                    return canvas;
+                }
+
+                function init(container, width, height, fillColor) {
+                    var canvas = createCanvas(container, width, height);
+                    var ctx = canvas.context;
+                    // define a custom fillCircle method
+                    ctx.fillCircle = function (x, y, radius, fillColor) {
+                        this.fillStyle = fillColor;
+                        this.beginPath();
+                        this.moveTo(x, y);
+                        this.arc(x, y, radius, 0, Math.PI * 2, false);
+                        this.fill();
+                    };
+                    ctx.clearTo = function (fillColor) {
+                        ctx.fillStyle = fillColor;
+                        ctx.fillRect(0, 0, width, height);
+                    };
+                    ctx.clearTo(fillColor || "rgba(0, 0, 0, 1)");
+
+                    // bind mouse events
+                    canvas.node.onmousemove = function (e) {
+                        if (!canvas.isDrawing) {
+                            return;
+                        }
+                        var x = e.pageX - this.offsetLeft;
+                        var y = e.pageY - this.offsetTop;
+                        var radius = 1; // or whatever
+                        var fillColor = 'rgba(255, 0, 0, 1)';
+                        ctx.fillCircle(x, y, radius, fillColor);
+
+
+                    };
+                    canvas.node.onmousedown = function (e) {
+                        canvas.isDrawing = true;
+                    };
+                    canvas.node.onmouseup = function (e) {
+                        canvas.isDrawing = false;
+                    };
+                }
+
+                var container = document.getElementById('canvas');
+                init(container, 28, 28, 'rgba(0, 0, 0, 1)');
+
+            })();
+
+            $('#ocrBtn').click(function () {
+                var canvasData = $('canvas')[0].getContext('2d').getImageData(0, 0, 28, 28);
+                var normalised_img = [];
+
+                for (var y = 0; y < 28; y++) {
+                    for (var x = 0; x < 28; x++) {
+                        var index = (x + y * 28) * 4;
+                        var r = canvasData.data[index];
+                        normalised_img.push(((r / 255.0) - 0.5) * 2);
+                    }
+                }
+                $('#nb_field').val(normalised_img);
+                $('#ocr_form').submit();
+            });
+        }
+    </script>
+    <style>
+        canvas {
+            border-color: red;
+            border-style: dashed;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="canvas">Click to draw<br /></div>
+    <form method="post" id="ocr_form" action="predict">
+        <input type="hidden" value="" id="nb_field" name="nb_field" />
+        <input type="button" id="ocrBtn" value="OCR IT!" />
+    </form>
+</body>
+
+</html>
