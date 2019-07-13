@@ -22,18 +22,18 @@ def load_mnist(path, kind='train'):
     with open(images_path, 'rb') as imgpath:
         magic, num, rows, cols = struct.unpack(">IIII",
                                                imgpath.read(16))
+        print(magic, num, rows, cols)
         images = np.fromfile(imgpath,
                              dtype=np.uint8).reshape(
             len(labels), 784)
         images = ((images / 255.) - .5) * 2
-
     return images, labels
 
 
 # %%
-X_train, y_train = load_mnist('mnist/', kind='train')
+X_train, y_train = load_mnist('./mnist/', kind='train')
 print('Rows: %d, columns: %d' % (X_train.shape[0], X_train.shape[1]))
-X_test, y_test = load_mnist('mnist/', kind='t10k')
+X_test, y_test = load_mnist('./mnist/', kind='t10k')
 print('Rows: %d, columns: %d' % (X_test.shape[0], X_test.shape[1]))
 # %%
 
@@ -50,7 +50,7 @@ plt.tight_layout()
 plt.show()
 
 #%%
-np.savez_compressed('mnist/mnist_scaled.npz',
+np.savez_compressed('./mnist/mnist_scaled.npz',
                     X_train=X_train,
                     y_train=y_train,
                     X_test=X_test,
@@ -114,8 +114,8 @@ print('Training accuracy: %.2f%%' % (acc * 100))
 mean_vals = np.mean(X_train, axis=0)
 std_val = np.std(X_train)
 
-X_train_centered = (X_train - mean_vals)/std_val
-X_test_centered = (X_test - mean_vals)/std_val
+X_train_centered = X_train #(X_train - mean_vals)/std_val
+X_test_centered = X_test #(X_test - mean_vals)/std_val
 
 del X_train, X_test
 
@@ -163,7 +163,7 @@ model.compile(optimizer=sgd_optimizer,
 
 history = model.fit(X_train_centered, y_train_onehot,
                     batch_size=64, epochs=50,
-                    verbose=1,
+                    verbose=0,
                     validation_split=0.1)
 
 #%%
@@ -205,9 +205,14 @@ correct_preds = np.sum(y_test == y_test_pred, axis=0)
 test_acc = correct_preds / y_test.shape[0]
 print('Test accuracy: %.2f%%' % (test_acc * 100))
 
-#%%
-from tensorflow.python.client import device_lib
 
-device_lib.list_local_devices()
+#%%
+from tensorflow.keras.models import load_model
+model = load_model('./mnist/mnist_model.h5')
+y_test_pred = model.predict_classes(X_test_centered[0:1,:],verbose=1)
+print(y_test_pred)
+
+#%%
+X_test_centered[0:1,:]
 
 #%%
