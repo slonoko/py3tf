@@ -16,9 +16,9 @@ class MyWebService(object):
         arr_test = nb_field.split(',')
         __input = np.array(arr_test, dtype=float)
         __input = np.expand_dims(__input, axis=0)
-        y_test_pred = model.predict_classes(__input, verbose=1)
+        y_test_pred = model.predict_classes(__input, verbose=0)
 
-        return y_test_pred
+        return str(y_test_pred)
 
 if __name__ == '__main__':
     conf = {
