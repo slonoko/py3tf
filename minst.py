@@ -132,7 +132,7 @@ model = keras.models.Sequential()
 
 model.add(
     keras.layers.Dense(
-        units=50,
+        units=100,
         input_dim=X_train_centered.shape[1],
         kernel_initializer='glorot_uniform',
         bias_initializer='zeros',
@@ -140,8 +140,8 @@ model.add(
 
 model.add(
     keras.layers.Dense(
-        units=50,
-        input_dim=50,
+        units=100,
+        input_dim=100,
         kernel_initializer='glorot_uniform',
         bias_initializer='zeros',
         activation='tanh'))
@@ -149,7 +149,7 @@ model.add(
 model.add(
     keras.layers.Dense(
         units=y_train_onehot.shape[1],
-        input_dim=50,
+        input_dim=100,
         kernel_initializer='glorot_uniform',
         bias_initializer='zeros',
         activation='softmax'))
