@@ -12,3 +12,10 @@ nbs2 = [(elements *2) for elements in nbs]
 print(nbs2)
 
 #%%
+import numpy as np
+w = [1, 0, 3, 1, 2]
+
+w_rot = np.array(w[::-1])
+print(w_rot.shape[0])
+
+#%%
