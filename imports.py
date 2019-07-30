@@ -7,7 +7,7 @@ warnings.simplefilter('ignore')
 !pip install --user  scikit-learn
 !pip install --user  matplotlib
 !pip install --user  pandas
-!pip install --user tensorflow-gpu
+#!pip install --user tensorflow-gpu
 !pip install --user  sklearn
 !pip install --user  pyprind
 !pip install --user  keras
@@ -18,5 +18,3 @@ from tensorflow.python.client import device_lib
 import tensorflow as tf
 print(tf.__version__)
 device_lib.list_local_devices()
-
-#%%
