@@ -330,7 +330,6 @@ with tf.Session(graph=g, config=config) as sess:
     save(saver, sess, epoch=10)
 
 #%%
-
 import tensorflow as tf
 import numpy as np
 
@@ -537,3 +536,6 @@ print('Test Accuracy: %.2f%%' % (100*
       np.sum(y_test == preds)/len(y_test)))
 
 ###%%
+
+
+#%%
