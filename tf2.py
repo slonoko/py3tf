@@ -88,7 +88,7 @@ adam = Adam(0.01)
 sgd = SGD(0.01)
 model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
 #%%
-model.fit(x_train, y_train, batch_size=1000, nb_epoch=50, validation_data=(x_test,y_test))
+model.fit(x_train, y_train, batch_size=1000, nb_epoch=20, validation_data=(x_test,y_test))
 #%%
 score = model.evaluate(x_test, y_test, verbose=0)
 print(f'Test accuracy is {score[1]}')
