@@ -20,3 +20,6 @@ print(tf.__version__)
 device_lib.list_local_devices()
 
 #%%
+pip install  pillow imageio pandas
+
+#%%

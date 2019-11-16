@@ -1,0 +1,31 @@
+TensorFlow 2.0 Upgrade Script
+-----------------------------
+Converted 1 files
+Detected 0 issues that require attention
+--------------------------------------------------------------------------------
+================================================================================
+Detailed log follows:
+
+================================================================================
+--------------------------------------------------------------------------------
+Processing file 'tf.py'
+ outputting to 'tf-migrated.py'
+--------------------------------------------------------------------------------
+
+ERROR: Failed to parse.
+Traceback (most recent call last):
+  File "/home/elie/Workspace/py3tf/venv/lib/python3.6/site-packages/tensorflow_core/tools/compatibility/ast_edits.py", line 916, in update_string_pasta
+    t = pasta.parse(text)
+  File "/home/elie/Workspace/py3tf/venv/lib/python3.6/site-packages/pasta/__init__.py", line 23, in parse
+    t = ast_utils.parse(src)
+  File "/home/elie/Workspace/py3tf/venv/lib/python3.6/site-packages/pasta/base/ast_utils.py", line 56, in parse
+    tree = ast.parse(sanitize_source(src))
+  File "/usr/lib/python3.6/ast.py", line 35, in parse
+    return compile(source, filename, mode, PyCF_ONLY_AST)
+  File "<unknown>", line 22
+    %time v = sess.run(z, feed_dict={x: t, y: r})
+    ^
+SyntaxError: invalid syntax
+
+--------------------------------------------------------------------------------
+
