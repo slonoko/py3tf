@@ -7,3 +7,129 @@ print(f'Tensorflow version {tf.__version__}\n')
 print(device_lib.list_local_devices())
 
 # %%
+import tensorflow as tf
+W = tf.Variable(tf.ones(shape=(2,2)), name="W")
+b = tf.Variable(tf.zeros(shape=(2,2)), name="b")
+
+@tf.function
+def model(x):
+    return W * x + b
+
+out_a = model([1,0])
+print(out_a)
+
+# %%
+import tensorflow as tf
+from tensorflow import keras
+NB_CLASSES = 10
+RESHAPED = 784
+
+model = tf.keras.models.Sequential()
+model.add(keras.layers.Dense(NB_CLASSES, input_shape=(RESHAPED,), kernel_initializer='zeros',name = 'dense_layer', activation='softmax'))
+
+
+# %%
+import tensorflow as tf
+import numpy as np
+from tensorflow import keras
+# Network and training parameters.
+EPOCHS = 200
+BATCH_SIZE = 128
+VERBOSE = 1
+NB_CLASSES = 10   # number of outputs = number of digits
+N_HIDDEN = 128
+VALIDATION_SPLIT = 0.2 # how much TRAIN is reserved for VALIDATION
+# Loading MNIST dataset.
+# verify
+# You can verify that the split between train and test is 60,000, and 10,000 respectively. 
+# Labels have one-hot representation.is automatically applied
+mnist = keras.datasets.mnist
+(X_train, Y_train), (X_test, Y_test) = mnist.load_data()
+# X_train is 60000 rows of 28x28 values; we  --> reshape it to 
+# 60000 x 784.
+RESHAPED = 784
+#
+X_train = X_train.reshape(60000, RESHAPED)
+X_test = X_test.reshape(10000, RESHAPED)
+X_train = X_train.astype('float32')
+X_test = X_test.astype('float32')
+# Normalize inputs to be within in [0, 1].
+X_train /= 255
+X_test /= 255
+print(X_train.shape[0], 'train samples')
+print(X_test.shape[0], 'test samples')
+# One-hot representation of the labels.
+Y_train = tf.keras.utils.to_categorical(Y_train, NB_CLASSES)
+Y_test = tf.keras.utils.to_categorical(Y_test, NB_CLASSES)
+# Build the model.
+model = tf.keras.models.Sequential()
+model.add(keras.layers.Dense(NB_CLASSES,
+   input_shape=(RESHAPED,),
+   name='dense_layer', 
+   activation='softmax'))
+# Compiling the model.
+model.compile(optimizer='SGD', 
+              loss='categorical_crossentropy',
+              metrics=['accuracy'])
+# Training the model.
+model.fit(X_train, Y_train,
+               batch_size=BATCH_SIZE, epochs=EPOCHS,
+               verbose=VERBOSE, validation_split=VALIDATION_SPLIT)
+#evaluate the model
+test_loss, test_acc = model.evaluate(X_test, Y_test)
+print('Test accuracy:', test_acc)
+
+
+# %%
+import tensorflow as tf
+from tensorflow import keras
+# Network and training.
+EPOCHS = 50
+BATCH_SIZE = 128
+VERBOSE = 1
+NB_CLASSES = 10   # number of outputs = number of digits
+N_HIDDEN = 128
+VALIDATION_SPLIT = 0.2 # how much TRAIN is reserved for VALIDATION
+# Loading MNIST dataset.
+# Labels have one-hot representation.
+mnist = keras.datasets.mnist
+(X_train, Y_train), (X_test, Y_test) = mnist.load_data()
+# X_train is 60000 rows of 28x28 values; we reshape it to 60000 x 784.
+RESHAPED = 784
+#
+X_train = X_train.reshape(60000, RESHAPED)
+X_test = X_test.reshape(10000, RESHAPED)
+X_train = X_train.astype('float32')
+X_test = X_test.astype('float32')
+# Normalize inputs to be within in [0, 1].
+X_train, X_test = X_train / 255.0, X_test / 255.0
+print(X_train.shape[0], 'train samples')
+print(X_test.shape[0], 'test samples')
+# Labels have one-hot representation.
+Y_train = tf.keras.utils.to_categorical(Y_train, NB_CLASSES)
+Y_test = tf.keras.utils.to_categorical(Y_test, NB_CLASSES)
+# Build the model.
+model = tf.keras.models.Sequential()
+model.add(keras.layers.Dense(N_HIDDEN,
+          input_shape=(RESHAPED,),
+          name='dense_layer', activation='relu'))
+model.add(keras.layers.Dense(N_HIDDEN,
+          name='dense_layer_2', activation='relu'))
+model.add(keras.layers.Dense(NB_CLASSES,
+          name='dense_layer_3', activation='softmax'))
+# Summary of the model.
+model.summary()
+# Compiling the model.
+model.compile(optimizer='SGD', 
+              loss='categorical_crossentropy',
+              metrics=['accuracy'])
+# Training the model.
+model.fit(X_train, Y_train,
+          batch_size=BATCH_SIZE, epochs=EPOCHS,
+          verbose=VERBOSE, validation_split=VALIDATION_SPLIT)
+# Evaluating the model.
+test_loss, test_acc = model.evaluate(X_test, Y_test)
+print('Test accuracy:', test_acc)
+
+
+# %%
