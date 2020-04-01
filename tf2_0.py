@@ -1,7 +1,8 @@
+#%%
 import tensorflow as tf
 from tensorflow.python.client import device_lib
 
-print(f'Tensorflow version {tf.__version__}\n')
+print(f'TensorFlow version {tf.__version__}\n')
 print(device_lib.list_local_devices())
 
 W = tf.Variable(tf.ones(shape=(2, 2)), name="W")
@@ -15,3 +16,7 @@ def model(x):
 
 out_a = model([1, 0])
 print(out_a)
+
+
+
+# %%
