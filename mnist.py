@@ -1,6 +1,11 @@
-#%% Learning CNN
+# %% Learning CNN
 import tensorflow as tf
 from tensorflow.keras import datasets, layers, models, optimizers
+
+gpus = tf.config.experimental.list_physical_devices('GPU')
+
+tf.config.experimental.set_memory_growth(gpus[0],
+                                         True)  # .set_virtual_device_configuration(gpus[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=2048)])
 
 EPOCHS = 5
 BATCH_SIZE = 128
