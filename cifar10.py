@@ -5,10 +5,10 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 
 gpus = tf.config.experimental.list_physical_devices('GPU')
-if len(gpus)>0:
+if len(gpus) > 0:
     tf.config.experimental.set_memory_growth(gpus[0], True)
     # .set_virtual_device_configuration(gpus[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=2048)])
-    
+
 EPOCHS = 50
 NUM_CLASSES = 10
 
