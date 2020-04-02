@@ -20,7 +20,7 @@ NB_CLASSES = 10
 
 def build(input_shape, classes):
     model = models.Sequential()
-    model.add(layers.Convolution2D(20, (5, 5), activation='relu', input_shape=input_shape))
+    model.add(layers.Convolution2D(30, (5, 5), activation='relu', input_shape=input_shape))
     model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
     model.add(layers.Convolution2D(50, (5, 5), activation='relu'))
     model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
