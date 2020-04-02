@@ -4,7 +4,8 @@ import numpy as np
 import time
 
 a = np.array([1, 2, 3, 4])
-print(a, a.T)
+a = np.reshape(a,-1)
+print(a)
 
 # %% Testing loop vs vectorization
 a = np.random.rand(1000000)
@@ -47,3 +48,4 @@ print(a.shape)
 a.shape[0]
 
 # %%
+
