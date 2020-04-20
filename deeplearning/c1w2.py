@@ -3,7 +3,7 @@
 import numpy as np
 import time
 
-a = np.array([1, 2, 3, 4])
+a = np.random.rand(2,2)
 a = np.reshape(a,-1)
 print(a)
 
@@ -48,4 +48,14 @@ print(a.shape)
 a.shape[0]
 
 # %%
+v = np.random.rand(3,1000)
+print(v)
 
+
+# %%
+v[1,1:64]
+
+# %%
+
+
+# %%

@@ -1,39 +1,49 @@
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 import tensorflow as tf
-import pandas as pd
-from tensorflow.keras.datasets import boston_housing
 from tensorflow import feature_column as fc
 
-(x_train, y_train), (x_test, y_test) = boston_housing.load_data()
+numeric_column = fc.numeric_column 
+categorical_column_with_vocabulary_list = fc.categorical_column_with_vocabulary_list
+gpus = tf.config.experimental.list_physical_devices("GPU")
 
-features = ['CRIM', 'ZN', 
-            'INDUS','CHAS','NOX','RM','AGE',
-            'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT']
-x_train_df = pd.DataFrame(x_train, columns= features)
-x_test_df = pd.DataFrame(x_test, columns= features)
-y_train_df = pd.DataFrame(y_train, columns=['MEDV'])
-y_test_df = pd.DataFrame(y_test, columns=['MEDV'])
-print(x_train_df.head())
+if len(gpus) > 0:
+    print("Using a GPU ...")
+    tf.config.experimental.set_memory_growth(gpus[0], True)
 
-feature_columns = []
-for feature_name in features:
-        feature_columns.append(fc.numeric_column(feature_name, dtype=tf.float32))
+featcols = [
+    tf.feature_column.numeric_column("area"),
+    tf.feature_column.categorical_column_with_vocabulary_list(
+        "type", ["bungalow", "apartment"]
+    )
+]
 
-def estimator_input_fn(df_data, df_label, epochs=10, shuffle=True, batch_size=32):
-    def input_function():
-        ds = tf.data.Dataset.from_tensor_slices((dict(df_data), df_label))
-        if shuffle:
-            ds = ds.shuffle(100)
-        ds = ds.batch(batch_size).repeat(epochs)
-        return ds
-    return input_function
 
-train_input_fn = estimator_input_fn(x_train_df, y_train_df)
-val_input_fn = estimator_input_fn(x_test_df, y_test_df, epochs=1, shuffle=False)
-                                                 
-linear_est = tf.estimator.LinearRegressor(feature_columns=feature_columns,  model_dir = 'logs/func/')
-linear_est.train(train_input_fn, steps=100)
-result = linear_est.evaluate(val_input_fn)
+def train_input_fn():
+    features = {
+        "area": [1000, 2000, 4000, 1000, 2000, 4000],
+        "type": [
+            "bungalow",
+            "bungalow",
+            "house",
+            "apartment",
+            "apartment",
+            "apartment",
+        ],
+    }
+    labels = [500, 1000, 1500, 700, 1300, 1900]
+    return features, labels
 
-result = linear_est.predict(val_input_fn)
-for pred,exp in zip(result, y_test[:32]):
-    print("Predicted Value: ", pred['predictions'][0], "Expected: ", exp)
+
+model = tf.estimator.LinearRegressor(feature_columns=featcols)
+model.train(input_fn=train_input_fn, steps=200)
+
+
+def predict_input_fn():
+    features = {"area": [1500, 1800], "type": ["house", "apt"]}
+    return features
+
+
+predictions = model.predict(predict_input_fn)
+print(next(predictions))
+print(next(predictions))
