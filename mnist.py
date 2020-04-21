@@ -50,13 +50,12 @@ model.summary()
 
 callbacks = [tf.keras.callbacks.TensorBoard(log_dir='logs')]
 
-#%% Fitting and getting the score
-history = model.fit(X_train, y_train,verbose=VERBOSE, batch_size=BATCH_SIZE, epochs=EPOCHS, validation_split=VALIDATION_SPLIT, callbacks=callbacks)
-score = model.evaluate(X_test, y_test, verbose=VERBOSE)
-
-print('\nTest score:\t', score[0])
-print('\nTest accuracy:\t', score[1])
-
+# %% Fitting and getting the score
+# history = model.fit(X_train, y_train,verbose=VERBOSE, batch_size=BATCH_SIZE, epochs=EPOCHS, validation_split=VALIDATION_SPLIT, callbacks=callbacks)
+# score = model.evaluate(X_test, y_test, verbose=VERBOSE)
+#
+# print('\nTest score:\t', score[0])
+# print('\nTest accuracy:\t', score[1])
 
 
 # %%

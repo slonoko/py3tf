@@ -77,7 +77,7 @@ datagen = ImageDataGenerator(
 
 callbacks = [
     # Write TensorBoard logs to './logs' directory
-    tf.keras.callbacks.TensorBoard(log_dir='logs')
+    tf.keras.callbacks.TensorBoard(log_dir='log_cifar10')
 ]
 model = build_model()
 model.compile(loss='categorical_crossentropy',
@@ -99,5 +99,3 @@ score = model.evaluate(x_test, y_test, batch_size=128, verbose=1)
 print("\nTest score:", score[0])
 print('Test accuracy:', score[1])
 print('Meaning, test result: %.3f loss: %.3f' % (score[1] * 100, score[0]))
-
-# %%
