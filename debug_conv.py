@@ -58,3 +58,5 @@ conv_cat = model.predict(cat_batch)
 conv_cat = np.squeeze(conv_cat, axis=0)
 print(conv_cat.shape)
 plt.imshow(conv_cat)
+
+# %%
