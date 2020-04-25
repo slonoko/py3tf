@@ -1,13 +1,14 @@
 # %% Learning CNN
 import tensorflow as tf
 from tensorflow.keras import datasets, layers, models, optimizers
+from tf_explain.callbacks.activations_visualization import ActivationsVisualizationCallback
 
 gpus = tf.config.experimental.list_physical_devices('GPU')
 
 if len(gpus)>0:
     print("Using a GPU ...")
-    #tf.config.experimental.set_memory_growth(gpus[0], True)
-    tf.config.experimental.set_virtual_device_configuration(gpus[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=4096)])
+    tf.config.experimental.set_memory_growth(gpus[0], True)
+    # tf.config.experimental.set_virtual_device_configuration(gpus[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=4096)])
 
 EPOCHS = 5
 BATCH_SIZE = 128
@@ -48,7 +49,11 @@ model = build(INPUT_SHAPE, NB_CLASSES)
 model.compile(loss='categorical_crossentropy', optimizer=OPTIMIZER, metrics=['accuracy'])
 model.summary()
 
-callbacks = [tf.keras.callbacks.TensorBoard(log_dir='logs')]
+callbacks = [tf.keras.callbacks.TensorBoard(log_dir='log_mnist'), ActivationsVisualizationCallback(
+    validation_data=(X_test, y_test),
+    layers_name=["max_pooling2d"],
+    output_dir='log_mnist',
+)]
 
 # %% Fitting and getting the score
 history = model.fit(X_train, y_train,verbose=VERBOSE, batch_size=BATCH_SIZE, epochs=EPOCHS, validation_split=VALIDATION_SPLIT, callbacks=callbacks)
