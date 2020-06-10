@@ -5,9 +5,9 @@ from tensorflow.keras import datasets, layers, models, preprocessing
 import tensorflow_datasets as tfds
 
 max_len = 500
-n_words = 5000
+n_words = 88000
 dim_embedding = 256
-EPOCHS = 5
+EPOCHS = 2
 BATCH_SIZE = 128
 model_dir = '.data/imdb/'
 
@@ -44,6 +44,20 @@ def prepare_embedding(review):
 def load_data():
     # load data
     (X_train, y_train), (X_test, y_test) = datasets.imdb.load_data(num_words=n_words)
+
+    X = np.concatenate((X_train, X_test), axis=0)
+    y = np.concatenate((y_train, y_test), axis=0)
+    print("Training data: ")
+    print(X.shape)
+    print(y.shape)
+    print("Classes: ")
+    print(np.unique(y))
+    print("Number of words: ")
+    print(len(np.unique(np.hstack(X))))
+    print("Review length: ")
+    result = [len(x) for x in X]
+    print("Mean %.2f words (%f)" % (np.mean(result), np.std(result)))
+
     # Pad sequences with max_len
     X_train = preprocessing.sequence.pad_sequences(X_train, maxlen=max_len)
     X_test = preprocessing.sequence.pad_sequences(X_test, maxlen=max_len)
@@ -57,21 +71,15 @@ def build_model():
     # the model will output dimension (input_length, dim_embedding)
     # the largest integer in the input should be no larger
     # than n_words (vocabulary size).
-    # model.add(layers.Embedding(n_words, dim_embedding, input_length=max_len))
-    # model.add(layers.Dropout(0.3))
-    # model.add(layers.Conv1D(256, 3, padding="valid", activation="relu"))
-    # # takes the maximum value of either feature vector from each of     # the n_words features
-    # model.add(layers.GlobalMaxPooling1D())
-    # model.add(layers.Dense(128, activation="relu"))
-    # model.add(layers.Dropout(0.5))
-    # model.add(layers.Dense(1, activation="sigmoid"))
-
     model.add(layers.Embedding(n_words, dim_embedding, input_length=max_len))
-    model.add(layers.Conv1D(dim_embedding, 3, padding='same', activation='relu'))
-    model.add(layers.MaxPooling1D())
-    model.add(layers.Flatten())
-    model.add(layers.Dense(250, activation='relu'))
-    model.add(layers.Dense(1, activation='sigmoid'))
+    model.add(layers.Dropout(0.3))
+    model.add(layers.Conv1D(256, 3, padding="valid", activation="relu"))
+    # takes the maximum value of either feature vector from each of the n_words features
+    model.add(layers.GlobalMaxPooling1D())
+    model.add(layers.Dense(128, activation="relu"))
+    model.add(layers.Dropout(0.5))
+    model.add(layers.Dense(1, activation="sigmoid"))
+
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     return model
 
