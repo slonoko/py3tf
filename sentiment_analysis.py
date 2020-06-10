@@ -5,11 +5,11 @@ from tensorflow.keras import datasets, layers, models, preprocessing
 import tensorflow_datasets as tfds
 
 max_len = 500
-n_words = 13000
+n_words = 5000
 dim_embedding = 256
-EPOCHS = 10
-BATCH_SIZE = 500
-model_dir = '.data/imdb_model'
+EPOCHS = 5
+BATCH_SIZE = 128
+model_dir = '.data/imdb/'
 
 pos_review = "Joaquin Phoenix gives a tour de force performance, fearless and stunning in its emotional depth and " \
             "physicality. It's impossible to talk about this without referencing Heath Ledger's Oscar-winning " \
@@ -57,14 +57,22 @@ def build_model():
     # the model will output dimension (input_length, dim_embedding)
     # the largest integer in the input should be no larger
     # than n_words (vocabulary size).
+    # model.add(layers.Embedding(n_words, dim_embedding, input_length=max_len))
+    # model.add(layers.Dropout(0.3))
+    # model.add(layers.Conv1D(256, 3, padding="valid", activation="relu"))
+    # # takes the maximum value of either feature vector from each of     # the n_words features
+    # model.add(layers.GlobalMaxPooling1D())
+    # model.add(layers.Dense(128, activation="relu"))
+    # model.add(layers.Dropout(0.5))
+    # model.add(layers.Dense(1, activation="sigmoid"))
+
     model.add(layers.Embedding(n_words, dim_embedding, input_length=max_len))
-    model.add(layers.Dropout(0.3))
-    model.add(layers.Conv1D(256, 3, padding="valid", activation="relu"))
-    # takes the maximum value of either feature vector from each of     # the n_words features
-    model.add(layers.GlobalMaxPooling1D())
-    model.add(layers.Dense(128, activation="relu"))
-    model.add(layers.Dropout(0.5))
-    model.add(layers.Dense(1, activation="sigmoid"))
+    model.add(layers.Conv1D(dim_embedding, 3, padding='same', activation='relu'))
+    model.add(layers.MaxPooling1D())
+    model.add(layers.Flatten())
+    model.add(layers.Dense(250, activation='relu'))
+    model.add(layers.Dense(1, activation='sigmoid'))
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     return model
 
 
@@ -72,13 +80,13 @@ def build_model():
 model = build_model()
 model.summary()
 
-callbacks = [tf.keras.callbacks.TensorBoard(log_dir='.data/log_imdb'),
-             tf.keras.callbacks.ModelCheckpoint(model_dir)]
+callbacks = [tf.keras.callbacks.TensorBoard(log_dir=f'{model_dir}/logs'),
+             tf.keras.callbacks.ModelCheckpoint(f'{model_dir}/model/weights', save_weights_only=True)]
 
 model.compile(optimizer=tf.optimizers.Adam(), loss=tf.losses.BinaryCrossentropy(), metrics=["accuracy"])
 
 if os.path.exists(model_dir):
-    model.load_weights(f'{model_dir}/variables/variables')
+    model.load_weights(f'{model_dir}/model/weights')
 else:
     model.fit(
         X_train,
@@ -88,9 +96,8 @@ else:
         validation_data=(X_test, y_test),
         callbacks=callbacks
     )
-    score = model.evaluate(X_test, y_test, batch_size=BATCH_SIZE)
-    print("\nTest score:", score[0])
-    print("Test accuracy:", score[1])
+    scores = model.evaluate(X_test, y_test, batch_size=BATCH_SIZE)
+    print("Accuracy: %.2f%%" % (scores[1] * 100))
 
 pos_result = model.predict(prepare_embedding(pos_review))
 neg_result = model.predict(prepare_embedding(neg_review))
