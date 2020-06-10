@@ -6,9 +6,14 @@ import tensorflow_datasets as tfds
 max_len = 200
 n_words = 10000
 dim_embedding = 256
-EPOCHS = 2
-BATCH_SIZE = 500
+EPOCHS = 10
+BATCH_SIZE = 1000
 
+gpus = tf.config.experimental.list_physical_devices("GPU")
+
+if len(gpus) > 0:
+    print("Using a GPU ...")
+    tf.config.experimental.set_memory_growth(gpus[0], True)
 
 def load_data():
     # load data
@@ -50,8 +55,7 @@ score = model.fit(
     y_train,
     epochs=EPOCHS,
     batch_size=BATCH_SIZE,
-    validation_data=(X_test, y_test),
-    callbacks=callbacks
+    validation_data=(X_test, y_test)
 )
 score = model.evaluate(X_test, y_test, batch_size=BATCH_SIZE)
 print("\nTest score:", score[0])
