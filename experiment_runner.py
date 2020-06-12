@@ -12,9 +12,7 @@ estimator = TensorFlow(
     source_directory="sentiment_analysis", 
     entry_script="experiment.py", 
     compute_target="local", 
-    #pip_packages=['tensorflow-datasets', 'numpy', 'azureml-dataprep[pandas,fuse]'], 
-    framework_version="2.1", 
-    #use_gpu=True, 
+    framework_version="2.1",  
     script_params={'--n-words': 88000, '--epochs': 2},
     environment_definition=environment
     )
