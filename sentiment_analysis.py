@@ -9,7 +9,7 @@ n_words = 88000
 dim_embedding = 256
 EPOCHS = 2
 BATCH_SIZE = 128
-model_dir = '.data/imdb/'
+model_dir = '.data/imdb'
 
 pos_review = "Joaquin Phoenix gives a tour de force performance, fearless and stunning in its emotional depth and " \
             "physicality. It's impossible to talk about this without referencing Heath Ledger's Oscar-winning " \
@@ -102,10 +102,12 @@ else:
         epochs=EPOCHS,
         batch_size=BATCH_SIZE,
         validation_data=(X_test, y_test),
-        callbacks=callbacks
+#        callbacks=callbacks
     )
     scores = model.evaluate(X_test, y_test, batch_size=BATCH_SIZE)
     print("Accuracy: %.2f%%" % (scores[1] * 100))
+
+model.save_weights(f'{model_dir}/model/weights')
 
 pos_result = model.predict(prepare_embedding(pos_review))
 neg_result = model.predict(prepare_embedding(neg_review))
