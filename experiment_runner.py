@@ -4,12 +4,9 @@ from azureml.core.conda_dependencies import CondaDependencies
 
 ws = Workspace.from_config()
 
-environment = Environment.from_existing_conda_environment(name="sentiment-env", conda_environment_name="sentiment") 
-# environment = Environment.get(workspace=ws, name="AzureML-TensorFlow-2.1-GPU")
-# environment = environment.clone("sentiment-env")
-# conda_dep = CondaDependencies()
-# conda_dep.add_conda_package("tensorflow-datasets")
-# environment.python.conda_dependencies=conda_dep
+environment = Environment.from_conda_specification(name="sentiment-env", file_path="conda.yml")
+# environment.register(ws)
+# environment = Environment.get(ws, "sentiment-env")
 
 estimator = TensorFlow(
     source_directory="sentiment_analysis", 

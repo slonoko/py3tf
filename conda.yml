@@ -1,0 +1,7 @@
+name: sentiment-env
+dependencies:
+  - tensorflow-gpu
+  - tensorflow-datasets
+  - pandas
+  - pip:
+    - azureml-sdk[notebooks,automl,explain]
