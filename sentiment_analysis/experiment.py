@@ -1,4 +1,4 @@
-from azureml.core import Environment, Experiment, Workspace, Run
+from azureml.core import Environment, Experiment, Workspace, Run, Model
 import argparse
 import tensorflow as tf
 import os
@@ -93,5 +93,5 @@ model.save(f'{model_dir}/sentiment_model.h5')
 scores = model.evaluate(X_test, y_test, batch_size=BATCH_SIZE)
 
 run.log("accuracy", (scores[1] * 100))
-#run.upload_folder(f'{model_dir}/model', './outputs')
+
 run.complete()
