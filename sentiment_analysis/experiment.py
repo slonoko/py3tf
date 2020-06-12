@@ -80,16 +80,15 @@ model.summary()
 model.compile(optimizer=tf.optimizers.Adam(),
               loss=tf.losses.BinaryCrossentropy(), metrics=["accuracy"])
 
-callbacks = [tf.keras.callbacks.ModelCheckpoint(f'{model_dir}/model', save_weights_only=True)]
-
 model.fit(
     X_train,
     y_train,
     epochs=EPOCHS,
     batch_size=BATCH_SIZE,
-    validation_data=(X_test, y_test),
-    callbacks=callbacks
+    validation_data=(X_test, y_test)
 )
+
+model.save(f'{model_dir}/sentiment_model.h5')
 
 scores = model.evaluate(X_test, y_test, batch_size=BATCH_SIZE)
 
