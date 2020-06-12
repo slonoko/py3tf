@@ -93,6 +93,6 @@ model.fit(
 
 scores = model.evaluate(X_test, y_test, batch_size=BATCH_SIZE)
 
-run.log("accuracy", f"{(scores[1] * 100)}%")
+run.log("accuracy", (scores[1] * 100))
 #run.upload_folder(f'{model_dir}/model', './outputs')
 run.complete()
