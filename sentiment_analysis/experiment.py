@@ -1,4 +1,4 @@
-from azureml.core import Environment, Experiment, Workspace, Run, Model
+from azureml.core import Environment, Experiment, Workspace, Run, Model, Datastore
 import argparse
 import tensorflow as tf
 import os

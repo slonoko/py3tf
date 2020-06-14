@@ -27,10 +27,10 @@ estimator = TensorFlow(
     )
 
 model_step = EstimatorStep(name="training model", estimator=estimator, compute_target="dummy", estimator_entry_script_arguments=['--n-words', 5000, '--epochs', 2])
-register_step = PythonScriptStep(name="register pipeline", source_directory="sentiment_analysis", script_name="registration.py", compute_target="dummy", runconfig=run_config)
-register_step.run_after(model_step)
+# register_step = PythonScriptStep(name="register pipeline", source_directory="sentiment_analysis", script_name="registration.py", compute_target="dummy", runconfig=run_config)
+# register_step.run_after(model_step)
 
-sentiment_pipe = Pipeline(workspace = ws, steps=[register_step])
+sentiment_pipe = Pipeline(workspace = ws, steps=[model_step])
 sentiment_pipe.validate()
 
 experiment = Experiment(workspace=ws, name="sentiment-analysis")
