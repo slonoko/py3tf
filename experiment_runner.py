@@ -6,6 +6,7 @@ from azureml.pipeline.core import Pipeline
 from azureml.core.runconfig import DEFAULT_CPU_IMAGE
 
 ws = Workspace.from_config()
+ds = ws.get_default_datastore()
 
 run_config = RunConfiguration()
 run_config.environment.docker.enabled = True
@@ -37,3 +38,5 @@ experiment = Experiment(workspace=ws, name="sentiment-analysis")
 run = experiment.submit(config=sentiment_pipe)
 
 run.wait_for_completion(show_output=True)
+
+ds.upload('outputs/sentiment_model.h5','models',overwrite=True, show_progress=True)

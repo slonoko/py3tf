@@ -11,7 +11,7 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('--max-len', type=int, dest='max_len', default=500)
 parser.add_argument('--n-words', type=int, dest='n_words', default=5000)
-parser.add_argument('--dim-embedding', type=int, dest='dim_embedding', default=256)
+parser.add_argument('--dim-embedding', type=int, dest='dim_embedding', default=32)
 parser.add_argument('--epochs', type=int, dest='epochs', default=5)
 parser.add_argument('--batch-size', type=int, dest='batch_size', default=128)
 
@@ -54,19 +54,12 @@ def load_data():
 
 def build_model():
     model = models.Sequential()
-    # Input - Embedding Layer
-    # the model will take as input an integer matrix of size     # (batch, input_length)
-    # the model will output dimension (input_length, dim_embedding)
-    # the largest integer in the input should be no larger
-    # than n_words (vocabulary size).
+
     model.add(layers.Embedding(n_words, dim_embedding, input_length=max_len))
-    model.add(layers.Dropout(0.3))
-    model.add(layers.Conv1D(256, 3, padding="valid", activation="relu"))
-    # takes the maximum value of either feature vector from each of the n_words features
-    model.add(layers.GlobalMaxPooling1D())
-    model.add(layers.Dense(128, activation="relu"))
-    model.add(layers.Dropout(0.5))
-    model.add(layers.Dense(1, activation="sigmoid"))
+    model.add(layers.Flatten())
+    model.add(layers.Dense(16, activation='relu'))
+    model.add(layers.Dense(16, activation='relu'))
+    model.add(layers.Dense(1, activation='sigmoid'))
 
     model.compile(loss='binary_crossentropy',
                   optimizer='adam', metrics=['accuracy'])
